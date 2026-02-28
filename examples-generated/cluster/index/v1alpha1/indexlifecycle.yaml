@@ -1,0 +1,35 @@
+apiVersion: index.elasticstack.crossplane.io/v1alpha1
+kind: IndexLifecycle
+metadata:
+  annotations:
+    meta.upbound.io/example-id: index/v1alpha1/indexlifecycle
+  labels:
+    testing.upbound.io/example-name: my_ilm
+  name: my-ilm
+spec:
+  forProvider:
+    delete:
+    - delete:
+      - {}
+      minAge: 2d
+    hot:
+    - minAge: 1h
+      readonly:
+      - {}
+      rollover:
+      - maxAge: 1d
+      setPriority:
+      - priority: 0
+    warm:
+    - allocate:
+      - exclude: |-
+          ${jsonencode({
+                  box_type = "hot"
+                })}
+        numberOfReplicas: 1
+        totalShardsPerNode: 200
+      minAge: 0ms
+      readonly:
+      - {}
+      setPriority:
+      - priority: 10

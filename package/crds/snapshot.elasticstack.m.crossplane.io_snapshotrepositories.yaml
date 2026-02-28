@@ -1,0 +1,1495 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  name: snapshotrepositories.snapshot.elasticstack.m.crossplane.io
+spec:
+  group: snapshot.elasticstack.m.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - elasticstack
+    kind: SnapshotRepository
+    listKind: SnapshotRepositoryList
+    plural: snapshotrepositories
+    singular: snapshotrepository
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SnapshotRepository is the Schema for the SnapshotRepositorys
+          API. Registers or updates a snapshot repository. See the put snapshot repository
+          API documentation https://www.elastic.co/guide/en/elasticsearch/reference/current/put-snapshot-repo-api.html
+          and register repository documentation https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html
+          for more details.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SnapshotRepositorySpec defines the desired state of SnapshotRepository
+            properties:
+              forProvider:
+                properties:
+                  azure:
+                    description: |-
+                      (Block List, Max: 1) Support for using Azure Blob storage as a repository for Snapshot/Restore. See the repository Azure plugin documentation for more details. (see below for nested schema)
+                      Support for using Azure Blob storage as a repository for Snapshot/Restore. See the [repository Azure plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-azure.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path within the container to the repository data.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            Azure named client to use.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        container:
+                          description: |-
+                            (String) Container name. You must create the Azure container before creating the repository.
+                            Container name. You must create the Azure container before creating the repository.
+                          type: string
+                        locationMode:
+                          description: |-
+                            (String) Location mode. primary_only or secondary_only. See the Azure storage redundancy documentation for more details.
+                            Location mode. `primary_only` or `secondary_only`. See the [Azure storage redundancy documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy) for more details.
+                          type: string
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  elasticsearchConnection:
+                    description: |-
+                      (Block List, Max: 1, Deprecated) Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead. (see below for nested schema)
+                      Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead.
+                    items:
+                      properties:
+                        apiKeySecretRef:
+                          description: |-
+                            (String, Sensitive) API Key to use for authentication to Elasticsearch
+                            API Key to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        bearerTokenSecretRef:
+                          description: |-
+                            (String, Sensitive) Bearer Token to use for authentication to Elasticsearch
+                            Bearer Token to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        caData:
+                          description: |-
+                            encoded custom Certificate Authority certificate
+                            PEM-encoded custom Certificate Authority certificate
+                          type: string
+                        caFile:
+                          description: |-
+                            (String) Path to a custom Certificate Authority certificate
+                            Path to a custom Certificate Authority certificate
+                          type: string
+                        certData:
+                          description: |-
+                            (String) PEM encoded certificate for client auth
+                            PEM encoded certificate for client auth
+                          type: string
+                        certFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded certificate for client auth
+                            Path to a file containing the PEM encoded certificate for client auth
+                          type: string
+                        endpointsSecretRef:
+                          items:
+                            description: |-
+                              A LocalSecretKeySelector is a reference to a secret key
+                              in the same namespace with the referencing object.
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                description: Name of the secret.
+                                type: string
+                            required:
+                            - key
+                            - name
+                            type: object
+                          type: array
+                        esClientAuthenticationSecretRef:
+                          description: |-
+                            (String, Sensitive) ES Client Authentication field to be used with the JWT token
+                            ES Client Authentication field to be used with the JWT token
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        headersSecretRef:
+                          description: |-
+                            (Map of String, Sensitive) A list of headers to be sent with each request to Elasticsearch.
+                            A list of headers to be sent with each request to Elasticsearch.
+                          properties:
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        insecure:
+                          description: |-
+                            (Boolean) Disable TLS certificate validation
+                            Disable TLS certificate validation
+                          type: boolean
+                        keyDataSecretRef:
+                          description: |-
+                            (String, Sensitive) PEM encoded private key for client auth
+                            PEM encoded private key for client auth
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        keyFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded private key for client auth
+                            Path to a file containing the PEM encoded private key for client auth
+                          type: string
+                        passwordSecretRef:
+                          description: |-
+                            (String, Sensitive) Password to use for API authentication to Elasticsearch.
+                            Password to use for API authentication to Elasticsearch.
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        username:
+                          description: |-
+                            (String) Username to use for API authentication to Elasticsearch.
+                            Username to use for API authentication to Elasticsearch.
+                          type: string
+                      type: object
+                    type: array
+                  fs:
+                    description: |-
+                      (Block List, Max: 1) Shared filesystem repository. Repositories of this type use a shared filesystem to store snapshots. This filesystem must be accessible to all master and data nodes in the cluster. (see below for nested schema)
+                      Shared filesystem repository. Repositories of this type use a shared filesystem to store snapshots. This filesystem must be accessible to all master and data nodes in the cluster.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        location:
+                          description: |-
+                            (String) Location of the shared filesystem used to store and retrieve snapshots.
+                            Location of the shared filesystem used to store and retrieve snapshots.
+                          type: string
+                        maxNumberOfSnapshots:
+                          description: |-
+                            (Number) Maximum number of snapshots the repository can contain.
+                            Maximum number of snapshots the repository can contain.
+                          type: number
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  gcs:
+                    description: |-
+                      (Block List, Max: 1) Support for using the Google Cloud Storage service as a repository for Snapshot/Restore. See the repository GCS plugin documentation for more details. (see below for nested schema)
+                      Support for using the Google Cloud Storage service as a repository for Snapshot/Restore. See the [repository GCS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-gcs.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path within the bucket to the repository data. Defaults to the root of the bucket.
+                          type: string
+                        bucket:
+                          description: |-
+                            (String) The name of the bucket to be used for snapshots.
+                            The name of the bucket to be used for snapshots.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            The name of the client to use to connect to Google Cloud Storage.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  hdfs:
+                    description: |-
+                      (Block List, Max: 1) Support for using HDFS File System as a repository for Snapshot/Restore. See the repository HDFS plugin documentation for more details. (see below for nested schema)
+                      Support for using HDFS File System as a repository for Snapshot/Restore. See the [repository HDFS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-hdfs.html) for more details.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        loadDefaults:
+                          description: |-
+                            (Boolean) Whether to load the default Hadoop configuration or not.
+                            Whether to load the default Hadoop configuration or not.
+                          type: boolean
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        path:
+                          description: |-
+                            (String) The file path within the filesystem where data is stored/loaded.
+                            The file path within the filesystem where data is stored/loaded.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        uri:
+                          description: |-
+                            (String) The uri address for hdfs. ex: "hdfs://:/".
+                            The uri address for hdfs. ex: "hdfs://<host>:<port>/".
+                          type: string
+                      type: object
+                    type: array
+                  s3:
+                    description: |-
+                      (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
+                      Support for using AWS S3 as a repository for Snapshot/Restore. See the [repository S3 plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3-repository.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path to the repository data within its bucket.
+                          type: string
+                        bucket:
+                          description: |-
+                            (String) The name of the bucket to be used for snapshots.
+                            Name of the S3 bucket to use for snapshots.
+                          type: string
+                        bufferSize:
+                          description: |-
+                            (String) Minimum threshold below which the chunk is uploaded using a single request.
+                            Minimum threshold below which the chunk is uploaded using a single request.
+                          type: string
+                        cannedAcl:
+                          description: |-
+                            (String) The S3 repository supports all S3 canned ACLs.
+                            The S3 repository supports all S3 canned ACLs.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            The name of the S3 client to use to connect to S3.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        endpoint:
+                          description: |-
+                            default S3 URLs.
+                            Custom S3 service endpoint, useful when using VPC endpoints or non-default S3 URLs.
+                          type: string
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        pathStyleAccess:
+                          description: |-
+                            (Boolean) If true, path style access pattern will be used.
+                            If true, path style access pattern will be used.
+                          type: boolean
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        serverSideEncryption:
+                          description: |-
+                            side using AES-256 algorithm.
+                            When true, files are encrypted server-side using AES-256 algorithm.
+                          type: boolean
+                        storageClass:
+                          description: |-
+                            (String) Sets the S3 storage class for objects stored in the snapshot repository.
+                            Sets the S3 storage class for objects stored in the snapshot repository.
+                          type: string
+                      type: object
+                    type: array
+                  url:
+                    description: |-
+                      only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it. (see below for nested schema)
+                      URL repository. Repositories of this type are read-only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        httpMaxRetries:
+                          description: |-
+                            (Number) Maximum number of retries for http and https URLs.
+                            Maximum number of retries for http and https URLs.
+                          type: number
+                        httpSocketTimeout:
+                          description: |-
+                            (String) Maximum wait time for data transfers over a connection.
+                            Maximum wait time for data transfers over a connection.
+                          type: string
+                        maxNumberOfSnapshots:
+                          description: |-
+                            (Number) Maximum number of snapshots the repository can contain.
+                            Maximum number of snapshots the repository can contain.
+                          type: number
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        url:
+                          description: |-
+                            only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it. (see below for nested schema)
+                            URL location of the root of the shared filesystem repository.
+                          type: string
+                      type: object
+                    type: array
+                  verify:
+                    description: |-
+                      (Boolean) If true, the request verifies the repository is functional on all master and data nodes in the cluster.
+                      If true, the request verifies the repository is functional on all master and data nodes in the cluster.
+                    type: boolean
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  azure:
+                    description: |-
+                      (Block List, Max: 1) Support for using Azure Blob storage as a repository for Snapshot/Restore. See the repository Azure plugin documentation for more details. (see below for nested schema)
+                      Support for using Azure Blob storage as a repository for Snapshot/Restore. See the [repository Azure plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-azure.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path within the container to the repository data.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            Azure named client to use.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        container:
+                          description: |-
+                            (String) Container name. You must create the Azure container before creating the repository.
+                            Container name. You must create the Azure container before creating the repository.
+                          type: string
+                        locationMode:
+                          description: |-
+                            (String) Location mode. primary_only or secondary_only. See the Azure storage redundancy documentation for more details.
+                            Location mode. `primary_only` or `secondary_only`. See the [Azure storage redundancy documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy) for more details.
+                          type: string
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  elasticsearchConnection:
+                    description: |-
+                      (Block List, Max: 1, Deprecated) Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead. (see below for nested schema)
+                      Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead.
+                    items:
+                      properties:
+                        apiKeySecretRef:
+                          description: |-
+                            (String, Sensitive) API Key to use for authentication to Elasticsearch
+                            API Key to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        bearerTokenSecretRef:
+                          description: |-
+                            (String, Sensitive) Bearer Token to use for authentication to Elasticsearch
+                            Bearer Token to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        caData:
+                          description: |-
+                            encoded custom Certificate Authority certificate
+                            PEM-encoded custom Certificate Authority certificate
+                          type: string
+                        caFile:
+                          description: |-
+                            (String) Path to a custom Certificate Authority certificate
+                            Path to a custom Certificate Authority certificate
+                          type: string
+                        certData:
+                          description: |-
+                            (String) PEM encoded certificate for client auth
+                            PEM encoded certificate for client auth
+                          type: string
+                        certFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded certificate for client auth
+                            Path to a file containing the PEM encoded certificate for client auth
+                          type: string
+                        endpointsSecretRef:
+                          items:
+                            type: string
+                          type: array
+                        esClientAuthenticationSecretRef:
+                          description: |-
+                            (String, Sensitive) ES Client Authentication field to be used with the JWT token
+                            ES Client Authentication field to be used with the JWT token
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        headersSecretRef:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        insecure:
+                          description: |-
+                            (Boolean) Disable TLS certificate validation
+                            Disable TLS certificate validation
+                          type: boolean
+                        keyDataSecretRef:
+                          description: |-
+                            (String, Sensitive) PEM encoded private key for client auth
+                            PEM encoded private key for client auth
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        keyFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded private key for client auth
+                            Path to a file containing the PEM encoded private key for client auth
+                          type: string
+                        passwordSecretRef:
+                          description: |-
+                            (String, Sensitive) Password to use for API authentication to Elasticsearch.
+                            Password to use for API authentication to Elasticsearch.
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        username:
+                          description: |-
+                            (String) Username to use for API authentication to Elasticsearch.
+                            Username to use for API authentication to Elasticsearch.
+                          type: string
+                      type: object
+                    type: array
+                  fs:
+                    description: |-
+                      (Block List, Max: 1) Shared filesystem repository. Repositories of this type use a shared filesystem to store snapshots. This filesystem must be accessible to all master and data nodes in the cluster. (see below for nested schema)
+                      Shared filesystem repository. Repositories of this type use a shared filesystem to store snapshots. This filesystem must be accessible to all master and data nodes in the cluster.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        location:
+                          description: |-
+                            (String) Location of the shared filesystem used to store and retrieve snapshots.
+                            Location of the shared filesystem used to store and retrieve snapshots.
+                          type: string
+                        maxNumberOfSnapshots:
+                          description: |-
+                            (Number) Maximum number of snapshots the repository can contain.
+                            Maximum number of snapshots the repository can contain.
+                          type: number
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  gcs:
+                    description: |-
+                      (Block List, Max: 1) Support for using the Google Cloud Storage service as a repository for Snapshot/Restore. See the repository GCS plugin documentation for more details. (see below for nested schema)
+                      Support for using the Google Cloud Storage service as a repository for Snapshot/Restore. See the [repository GCS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-gcs.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path within the bucket to the repository data. Defaults to the root of the bucket.
+                          type: string
+                        bucket:
+                          description: |-
+                            (String) The name of the bucket to be used for snapshots.
+                            The name of the bucket to be used for snapshots.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            The name of the client to use to connect to Google Cloud Storage.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  hdfs:
+                    description: |-
+                      (Block List, Max: 1) Support for using HDFS File System as a repository for Snapshot/Restore. See the repository HDFS plugin documentation for more details. (see below for nested schema)
+                      Support for using HDFS File System as a repository for Snapshot/Restore. See the [repository HDFS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-hdfs.html) for more details.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        loadDefaults:
+                          description: |-
+                            (Boolean) Whether to load the default Hadoop configuration or not.
+                            Whether to load the default Hadoop configuration or not.
+                          type: boolean
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        path:
+                          description: |-
+                            (String) The file path within the filesystem where data is stored/loaded.
+                            The file path within the filesystem where data is stored/loaded.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        uri:
+                          description: |-
+                            (String) The uri address for hdfs. ex: "hdfs://:/".
+                            The uri address for hdfs. ex: "hdfs://<host>:<port>/".
+                          type: string
+                      type: object
+                    type: array
+                  s3:
+                    description: |-
+                      (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
+                      Support for using AWS S3 as a repository for Snapshot/Restore. See the [repository S3 plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3-repository.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path to the repository data within its bucket.
+                          type: string
+                        bucket:
+                          description: |-
+                            (String) The name of the bucket to be used for snapshots.
+                            Name of the S3 bucket to use for snapshots.
+                          type: string
+                        bufferSize:
+                          description: |-
+                            (String) Minimum threshold below which the chunk is uploaded using a single request.
+                            Minimum threshold below which the chunk is uploaded using a single request.
+                          type: string
+                        cannedAcl:
+                          description: |-
+                            (String) The S3 repository supports all S3 canned ACLs.
+                            The S3 repository supports all S3 canned ACLs.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            The name of the S3 client to use to connect to S3.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        endpoint:
+                          description: |-
+                            default S3 URLs.
+                            Custom S3 service endpoint, useful when using VPC endpoints or non-default S3 URLs.
+                          type: string
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        pathStyleAccess:
+                          description: |-
+                            (Boolean) If true, path style access pattern will be used.
+                            If true, path style access pattern will be used.
+                          type: boolean
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        serverSideEncryption:
+                          description: |-
+                            side using AES-256 algorithm.
+                            When true, files are encrypted server-side using AES-256 algorithm.
+                          type: boolean
+                        storageClass:
+                          description: |-
+                            (String) Sets the S3 storage class for objects stored in the snapshot repository.
+                            Sets the S3 storage class for objects stored in the snapshot repository.
+                          type: string
+                      type: object
+                    type: array
+                  url:
+                    description: |-
+                      only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it. (see below for nested schema)
+                      URL repository. Repositories of this type are read-only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        httpMaxRetries:
+                          description: |-
+                            (Number) Maximum number of retries for http and https URLs.
+                            Maximum number of retries for http and https URLs.
+                          type: number
+                        httpSocketTimeout:
+                          description: |-
+                            (String) Maximum wait time for data transfers over a connection.
+                            Maximum wait time for data transfers over a connection.
+                          type: string
+                        maxNumberOfSnapshots:
+                          description: |-
+                            (Number) Maximum number of snapshots the repository can contain.
+                            Maximum number of snapshots the repository can contain.
+                          type: number
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        url:
+                          description: |-
+                            only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it. (see below for nested schema)
+                            URL location of the root of the shared filesystem repository.
+                          type: string
+                      type: object
+                    type: array
+                  verify:
+                    description: |-
+                      (Boolean) If true, the request verifies the repository is functional on all master and data nodes in the cluster.
+                      If true, the request verifies the repository is functional on all master and data nodes in the cluster.
+                    type: boolean
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+          status:
+            description: SnapshotRepositoryStatus defines the observed state of SnapshotRepository.
+            properties:
+              atProvider:
+                properties:
+                  azure:
+                    description: |-
+                      (Block List, Max: 1) Support for using Azure Blob storage as a repository for Snapshot/Restore. See the repository Azure plugin documentation for more details. (see below for nested schema)
+                      Support for using Azure Blob storage as a repository for Snapshot/Restore. See the [repository Azure plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-azure.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path within the container to the repository data.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            Azure named client to use.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        container:
+                          description: |-
+                            (String) Container name. You must create the Azure container before creating the repository.
+                            Container name. You must create the Azure container before creating the repository.
+                          type: string
+                        locationMode:
+                          description: |-
+                            (String) Location mode. primary_only or secondary_only. See the Azure storage redundancy documentation for more details.
+                            Location mode. `primary_only` or `secondary_only`. See the [Azure storage redundancy documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy) for more details.
+                          type: string
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  elasticsearchConnection:
+                    description: |-
+                      (Block List, Max: 1, Deprecated) Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead. (see below for nested schema)
+                      Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead.
+                    items:
+                      properties:
+                        caData:
+                          description: |-
+                            encoded custom Certificate Authority certificate
+                            PEM-encoded custom Certificate Authority certificate
+                          type: string
+                        caFile:
+                          description: |-
+                            (String) Path to a custom Certificate Authority certificate
+                            Path to a custom Certificate Authority certificate
+                          type: string
+                        certData:
+                          description: |-
+                            (String) PEM encoded certificate for client auth
+                            PEM encoded certificate for client auth
+                          type: string
+                        certFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded certificate for client auth
+                            Path to a file containing the PEM encoded certificate for client auth
+                          type: string
+                        insecure:
+                          description: |-
+                            (Boolean) Disable TLS certificate validation
+                            Disable TLS certificate validation
+                          type: boolean
+                        keyFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded private key for client auth
+                            Path to a file containing the PEM encoded private key for client auth
+                          type: string
+                        username:
+                          description: |-
+                            (String) Username to use for API authentication to Elasticsearch.
+                            Username to use for API authentication to Elasticsearch.
+                          type: string
+                      type: object
+                    type: array
+                  fs:
+                    description: |-
+                      (Block List, Max: 1) Shared filesystem repository. Repositories of this type use a shared filesystem to store snapshots. This filesystem must be accessible to all master and data nodes in the cluster. (see below for nested schema)
+                      Shared filesystem repository. Repositories of this type use a shared filesystem to store snapshots. This filesystem must be accessible to all master and data nodes in the cluster.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        location:
+                          description: |-
+                            (String) Location of the shared filesystem used to store and retrieve snapshots.
+                            Location of the shared filesystem used to store and retrieve snapshots.
+                          type: string
+                        maxNumberOfSnapshots:
+                          description: |-
+                            (Number) Maximum number of snapshots the repository can contain.
+                            Maximum number of snapshots the repository can contain.
+                          type: number
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  gcs:
+                    description: |-
+                      (Block List, Max: 1) Support for using the Google Cloud Storage service as a repository for Snapshot/Restore. See the repository GCS plugin documentation for more details. (see below for nested schema)
+                      Support for using the Google Cloud Storage service as a repository for Snapshot/Restore. See the [repository GCS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-gcs.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path within the bucket to the repository data. Defaults to the root of the bucket.
+                          type: string
+                        bucket:
+                          description: |-
+                            (String) The name of the bucket to be used for snapshots.
+                            The name of the bucket to be used for snapshots.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            The name of the client to use to connect to Google Cloud Storage.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                      type: object
+                    type: array
+                  hdfs:
+                    description: |-
+                      (Block List, Max: 1) Support for using HDFS File System as a repository for Snapshot/Restore. See the repository HDFS plugin documentation for more details. (see below for nested schema)
+                      Support for using HDFS File System as a repository for Snapshot/Restore. See the [repository HDFS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-hdfs.html) for more details.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        loadDefaults:
+                          description: |-
+                            (Boolean) Whether to load the default Hadoop configuration or not.
+                            Whether to load the default Hadoop configuration or not.
+                          type: boolean
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        path:
+                          description: |-
+                            (String) The file path within the filesystem where data is stored/loaded.
+                            The file path within the filesystem where data is stored/loaded.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        uri:
+                          description: |-
+                            (String) The uri address for hdfs. ex: "hdfs://:/".
+                            The uri address for hdfs. ex: "hdfs://<host>:<port>/".
+                          type: string
+                      type: object
+                    type: array
+                  id:
+                    description: (String) Internal identifier of the resource
+                    type: string
+                  s3:
+                    description: |-
+                      (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
+                      Support for using AWS S3 as a repository for Snapshot/Restore. See the [repository S3 plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3-repository.html) for more details.
+                    items:
+                      properties:
+                        basePath:
+                          description: |-
+                            (String) Specifies the path within the container to the repository data.
+                            Specifies the path to the repository data within its bucket.
+                          type: string
+                        bucket:
+                          description: |-
+                            (String) The name of the bucket to be used for snapshots.
+                            Name of the S3 bucket to use for snapshots.
+                          type: string
+                        bufferSize:
+                          description: |-
+                            (String) Minimum threshold below which the chunk is uploaded using a single request.
+                            Minimum threshold below which the chunk is uploaded using a single request.
+                          type: string
+                        cannedAcl:
+                          description: |-
+                            (String) The S3 repository supports all S3 canned ACLs.
+                            The S3 repository supports all S3 canned ACLs.
+                          type: string
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        client:
+                          description: |-
+                            (String) Azure named client to use.
+                            The name of the S3 client to use to connect to S3.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        endpoint:
+                          description: |-
+                            default S3 URLs.
+                            Custom S3 service endpoint, useful when using VPC endpoints or non-default S3 URLs.
+                          type: string
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        pathStyleAccess:
+                          description: |-
+                            (Boolean) If true, path style access pattern will be used.
+                            If true, path style access pattern will be used.
+                          type: boolean
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        serverSideEncryption:
+                          description: |-
+                            side using AES-256 algorithm.
+                            When true, files are encrypted server-side using AES-256 algorithm.
+                          type: boolean
+                        storageClass:
+                          description: |-
+                            (String) Sets the S3 storage class for objects stored in the snapshot repository.
+                            Sets the S3 storage class for objects stored in the snapshot repository.
+                          type: string
+                      type: object
+                    type: array
+                  url:
+                    description: |-
+                      only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it. (see below for nested schema)
+                      URL repository. Repositories of this type are read-only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it.
+                    items:
+                      properties:
+                        chunkSize:
+                          description: |-
+                            (String) Maximum size of files in snapshots.
+                            Maximum size of files in snapshots.
+                          type: string
+                        compress:
+                          description: |-
+                            (Boolean) If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                            If true, metadata files, such as index mappings and settings, are compressed in snapshots.
+                          type: boolean
+                        httpMaxRetries:
+                          description: |-
+                            (Number) Maximum number of retries for http and https URLs.
+                            Maximum number of retries for http and https URLs.
+                          type: number
+                        httpSocketTimeout:
+                          description: |-
+                            (String) Maximum wait time for data transfers over a connection.
+                            Maximum wait time for data transfers over a connection.
+                          type: string
+                        maxNumberOfSnapshots:
+                          description: |-
+                            (Number) Maximum number of snapshots the repository can contain.
+                            Maximum number of snapshots the repository can contain.
+                          type: number
+                        maxRestoreBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot restore rate per node.
+                            Maximum snapshot restore rate per node.
+                          type: string
+                        maxSnapshotBytesPerSec:
+                          description: |-
+                            (String) Maximum snapshot creation rate per node.
+                            Maximum snapshot creation rate per node.
+                          type: string
+                        readonly:
+                          description: |-
+                            only.
+                            If true, the repository is read-only.
+                          type: boolean
+                        url:
+                          description: |-
+                            only for the cluster. This means the cluster can retrieve or restore snapshots from the repository but cannot write or create snapshots in it. (see below for nested schema)
+                            URL location of the root of the shared filesystem repository.
+                          type: string
+                      type: object
+                    type: array
+                  verify:
+                    description: |-
+                      (Boolean) If true, the request verifies the repository is functional on all master and data nodes in the cluster.
+                      If true, the request verifies the repository is functional on all master and data nodes in the cluster.
+                    type: boolean
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

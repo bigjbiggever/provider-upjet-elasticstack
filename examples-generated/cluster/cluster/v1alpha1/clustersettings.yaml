@@ -1,0 +1,26 @@
+apiVersion: cluster.elasticstack.crossplane.io/v1alpha1
+kind: ClusterSettings
+metadata:
+  annotations:
+    meta.upbound.io/example-id: cluster/v1alpha1/clustersettings
+  labels:
+    testing.upbound.io/example-name: my_cluster_settings
+  name: my-cluster-settings
+spec:
+  forProvider:
+    persistent:
+    - setting:
+      - name: indices.lifecycle.poll_interval
+        value: 10m
+      - name: indices.recovery.max_bytes_per_sec
+        value: 50mb
+      - name: indices.breaker.total.limit
+        value: 65%
+      - name: xpack.security.audit.logfile.events.include
+        valueList:
+        - ACCESS_DENIED
+        - ACCESS_GRANTED
+    transient:
+    - setting:
+      - name: indices.breaker.total.limit
+        value: 60%

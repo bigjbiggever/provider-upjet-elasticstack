@@ -1,0 +1,13 @@
+apiVersion: snapshot.elasticstack.m.crossplane.io/v1alpha1
+kind: SnapshotRepository
+metadata:
+  annotations:
+    meta.upbound.io/example-id: snapshot/v1alpha1/snapshotrepository
+  labels:
+    testing.upbound.io/example-name: my_url_repo
+  name: my-url-repo
+  namespace: crossplane-system
+spec:
+  forProvider:
+    url:
+    - url: https://example.com/repo

@@ -1,0 +1,32 @@
+apiVersion: security.elasticstack.crossplane.io/v1alpha1
+kind: ElasticsearchRole
+metadata:
+  annotations:
+    meta.upbound.io/example-id: security/v1alpha1/elasticsearchrole
+  labels:
+    testing.upbound.io/example-name: role
+  name: role
+spec:
+  forProvider:
+    applications:
+    - application: myapp
+      privileges:
+      - admin
+      - read
+      resources:
+      - '*'
+    cluster:
+    - all
+    description: Role for testing
+    indices:
+    - names:
+      - index1
+      - index2
+      privileges:
+      - all
+    metadata: |-
+      ${jsonencode({
+          version = 1
+        })}
+    runAs:
+    - other_user

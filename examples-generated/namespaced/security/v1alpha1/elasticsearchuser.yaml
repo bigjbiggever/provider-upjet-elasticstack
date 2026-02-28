@@ -1,0 +1,31 @@
+apiVersion: security.elasticstack.m.crossplane.io/v1alpha1
+kind: ElasticsearchUser
+metadata:
+  annotations:
+    meta.upbound.io/example-id: security/v1alpha1/elasticsearchuser
+  labels:
+    testing.upbound.io/example-name: user
+  name: user
+  namespace: crossplane-system
+spec:
+  forProvider:
+    elasticsearchConnection:
+    - endpointsSecretRef:
+      - key: example-key
+        name: example-secret
+      passwordSecretRef:
+        key: example-key
+        name: example-secret
+      username: elastic
+    metadata: |-
+      ${jsonencode({
+          "env"    = "testing"
+          "open"   = false
+          "number" = 49
+        })}
+    passwordHashSecretRef:
+      key: example-key
+      name: example-secret
+    roles:
+    - kibana_user
+    username: testuser

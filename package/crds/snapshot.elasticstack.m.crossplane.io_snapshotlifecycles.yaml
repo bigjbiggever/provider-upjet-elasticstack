@@ -1,0 +1,729 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  name: snapshotlifecycles.snapshot.elasticstack.m.crossplane.io
+spec:
+  group: snapshot.elasticstack.m.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - elasticstack
+    kind: SnapshotLifecycle
+    listKind: SnapshotLifecycleList
+    plural: snapshotlifecycles
+    singular: snapshotlifecycle
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: SnapshotLifecycle is the Schema for the SnapshotLifecycles API.
+          Creates or updates a snapshot lifecycle policy. See the SLM API policy documentation
+          https://www.elastic.co/guide/en/elasticsearch/reference/current/slm-api-put-policy.html
+          for more details.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SnapshotLifecycleSpec defines the desired state of SnapshotLifecycle
+            properties:
+              forProvider:
+                properties:
+                  elasticsearchConnection:
+                    description: |-
+                      (Block List, Max: 1, Deprecated) Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead. (see below for nested schema)
+                      Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead.
+                    items:
+                      properties:
+                        apiKeySecretRef:
+                          description: |-
+                            (String, Sensitive) API Key to use for authentication to Elasticsearch
+                            API Key to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        bearerTokenSecretRef:
+                          description: |-
+                            (String, Sensitive) Bearer Token to use for authentication to Elasticsearch
+                            Bearer Token to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        caData:
+                          description: |-
+                            encoded custom Certificate Authority certificate
+                            PEM-encoded custom Certificate Authority certificate
+                          type: string
+                        caFile:
+                          description: |-
+                            (String) Path to a custom Certificate Authority certificate
+                            Path to a custom Certificate Authority certificate
+                          type: string
+                        certData:
+                          description: |-
+                            (String) PEM encoded certificate for client auth
+                            PEM encoded certificate for client auth
+                          type: string
+                        certFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded certificate for client auth
+                            Path to a file containing the PEM encoded certificate for client auth
+                          type: string
+                        endpointsSecretRef:
+                          items:
+                            description: |-
+                              A LocalSecretKeySelector is a reference to a secret key
+                              in the same namespace with the referencing object.
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                description: Name of the secret.
+                                type: string
+                            required:
+                            - key
+                            - name
+                            type: object
+                          type: array
+                        esClientAuthenticationSecretRef:
+                          description: |-
+                            (String, Sensitive) ES Client Authentication field to be used with the JWT token
+                            ES Client Authentication field to be used with the JWT token
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        headersSecretRef:
+                          description: |-
+                            (Map of String, Sensitive) A list of headers to be sent with each request to Elasticsearch.
+                            A list of headers to be sent with each request to Elasticsearch.
+                          properties:
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        insecure:
+                          description: |-
+                            (Boolean) Disable TLS certificate validation
+                            Disable TLS certificate validation
+                          type: boolean
+                        keyDataSecretRef:
+                          description: |-
+                            (String, Sensitive) PEM encoded private key for client auth
+                            PEM encoded private key for client auth
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        keyFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded private key for client auth
+                            Path to a file containing the PEM encoded private key for client auth
+                          type: string
+                        passwordSecretRef:
+                          description: |-
+                            (String, Sensitive) Password to use for API authentication to Elasticsearch.
+                            Password to use for API authentication to Elasticsearch.
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        username:
+                          description: |-
+                            (String) Username to use for API authentication to Elasticsearch.
+                            Username to use for API authentication to Elasticsearch.
+                          type: string
+                      type: object
+                    type: array
+                  expandWildcards:
+                    description: |-
+                      separated values, such as closed,hidden.
+                      Determines how wildcard patterns in the `indices` parameter match data streams and indices. Supports comma-separated values, such as `closed,hidden`.
+                    type: string
+                  expireAfter:
+                    description: |-
+                      (String) Time period after which a snapshot is considered expired and eligible for deletion.
+                      Time period after which a snapshot is considered expired and eligible for deletion.
+                    type: string
+                  featureStates:
+                    description: |-
+                      (Set of String) Feature states to include in the snapshot.
+                      Feature states to include in the snapshot.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  ignoreUnavailable:
+                    description: |-
+                      (Boolean) If false, the snapshot fails if any data stream or index in indices is missing or closed. If true, the snapshot ignores missing or closed data streams and indices.
+                      If `false`, the snapshot fails if any data stream or index in indices is missing or closed. If `true`, the snapshot ignores missing or closed data streams and indices.
+                    type: boolean
+                  includeGlobalState:
+                    description: |-
+                      (Boolean) If true, include the cluster state in the snapshot.
+                      If `true`, include the cluster state in the snapshot.
+                    type: boolean
+                  indices:
+                    description: |-
+                      separated list of data streams and indices to include in the snapshot.
+                      Comma-separated list of data streams and indices to include in the snapshot.
+                    items:
+                      type: string
+                    type: array
+                  maxCount:
+                    description: |-
+                      (Number) Maximum number of snapshots to retain, even if the snapshots have not yet expired.
+                      Maximum number of snapshots to retain, even if the snapshots have not yet expired.
+                    type: number
+                  metadata:
+                    description: |-
+                      (String) Attaches arbitrary metadata to the snapshot.
+                      Attaches arbitrary metadata to the snapshot.
+                    type: string
+                  minCount:
+                    description: |-
+                      (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
+                      Minimum number of snapshots to retain, even if the snapshots have expired.
+                    type: number
+                  partial:
+                    description: |-
+                      (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
+                      If `false`, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
+                    type: boolean
+                  repository:
+                    description: |-
+                      (String) Repository used to store snapshots created by this policy.
+                      Repository used to store snapshots created by this policy.
+                    type: string
+                  schedule:
+                    description: |-
+                      (String) Periodic or absolute schedule at which the policy creates snapshots.
+                      Periodic or absolute schedule at which the policy creates snapshots.
+                    type: string
+                  snapshotName:
+                    description: |-
+                      (String) Name automatically assigned to each snapshot created by the policy.
+                      Name automatically assigned to each snapshot created by the policy.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  elasticsearchConnection:
+                    description: |-
+                      (Block List, Max: 1, Deprecated) Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead. (see below for nested schema)
+                      Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead.
+                    items:
+                      properties:
+                        apiKeySecretRef:
+                          description: |-
+                            (String, Sensitive) API Key to use for authentication to Elasticsearch
+                            API Key to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        bearerTokenSecretRef:
+                          description: |-
+                            (String, Sensitive) Bearer Token to use for authentication to Elasticsearch
+                            Bearer Token to use for authentication to Elasticsearch
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        caData:
+                          description: |-
+                            encoded custom Certificate Authority certificate
+                            PEM-encoded custom Certificate Authority certificate
+                          type: string
+                        caFile:
+                          description: |-
+                            (String) Path to a custom Certificate Authority certificate
+                            Path to a custom Certificate Authority certificate
+                          type: string
+                        certData:
+                          description: |-
+                            (String) PEM encoded certificate for client auth
+                            PEM encoded certificate for client auth
+                          type: string
+                        certFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded certificate for client auth
+                            Path to a file containing the PEM encoded certificate for client auth
+                          type: string
+                        endpointsSecretRef:
+                          items:
+                            type: string
+                          type: array
+                        esClientAuthenticationSecretRef:
+                          description: |-
+                            (String, Sensitive) ES Client Authentication field to be used with the JWT token
+                            ES Client Authentication field to be used with the JWT token
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        headersSecretRef:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        insecure:
+                          description: |-
+                            (Boolean) Disable TLS certificate validation
+                            Disable TLS certificate validation
+                          type: boolean
+                        keyDataSecretRef:
+                          description: |-
+                            (String, Sensitive) PEM encoded private key for client auth
+                            PEM encoded private key for client auth
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        keyFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded private key for client auth
+                            Path to a file containing the PEM encoded private key for client auth
+                          type: string
+                        passwordSecretRef:
+                          description: |-
+                            (String, Sensitive) Password to use for API authentication to Elasticsearch.
+                            Password to use for API authentication to Elasticsearch.
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        username:
+                          description: |-
+                            (String) Username to use for API authentication to Elasticsearch.
+                            Username to use for API authentication to Elasticsearch.
+                          type: string
+                      type: object
+                    type: array
+                  expandWildcards:
+                    description: |-
+                      separated values, such as closed,hidden.
+                      Determines how wildcard patterns in the `indices` parameter match data streams and indices. Supports comma-separated values, such as `closed,hidden`.
+                    type: string
+                  expireAfter:
+                    description: |-
+                      (String) Time period after which a snapshot is considered expired and eligible for deletion.
+                      Time period after which a snapshot is considered expired and eligible for deletion.
+                    type: string
+                  featureStates:
+                    description: |-
+                      (Set of String) Feature states to include in the snapshot.
+                      Feature states to include in the snapshot.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  ignoreUnavailable:
+                    description: |-
+                      (Boolean) If false, the snapshot fails if any data stream or index in indices is missing or closed. If true, the snapshot ignores missing or closed data streams and indices.
+                      If `false`, the snapshot fails if any data stream or index in indices is missing or closed. If `true`, the snapshot ignores missing or closed data streams and indices.
+                    type: boolean
+                  includeGlobalState:
+                    description: |-
+                      (Boolean) If true, include the cluster state in the snapshot.
+                      If `true`, include the cluster state in the snapshot.
+                    type: boolean
+                  indices:
+                    description: |-
+                      separated list of data streams and indices to include in the snapshot.
+                      Comma-separated list of data streams and indices to include in the snapshot.
+                    items:
+                      type: string
+                    type: array
+                  maxCount:
+                    description: |-
+                      (Number) Maximum number of snapshots to retain, even if the snapshots have not yet expired.
+                      Maximum number of snapshots to retain, even if the snapshots have not yet expired.
+                    type: number
+                  metadata:
+                    description: |-
+                      (String) Attaches arbitrary metadata to the snapshot.
+                      Attaches arbitrary metadata to the snapshot.
+                    type: string
+                  minCount:
+                    description: |-
+                      (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
+                      Minimum number of snapshots to retain, even if the snapshots have expired.
+                    type: number
+                  partial:
+                    description: |-
+                      (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
+                      If `false`, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
+                    type: boolean
+                  repository:
+                    description: |-
+                      (String) Repository used to store snapshots created by this policy.
+                      Repository used to store snapshots created by this policy.
+                    type: string
+                  schedule:
+                    description: |-
+                      (String) Periodic or absolute schedule at which the policy creates snapshots.
+                      Periodic or absolute schedule at which the policy creates snapshots.
+                    type: string
+                  snapshotName:
+                    description: |-
+                      (String) Name automatically assigned to each snapshot created by the policy.
+                      Name automatically assigned to each snapshot created by the policy.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.repository is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.repository)
+                || (has(self.initProvider) && has(self.initProvider.repository))'
+            - message: spec.forProvider.schedule is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.schedule)
+                || (has(self.initProvider) && has(self.initProvider.schedule))'
+          status:
+            description: SnapshotLifecycleStatus defines the observed state of SnapshotLifecycle.
+            properties:
+              atProvider:
+                properties:
+                  elasticsearchConnection:
+                    description: |-
+                      (Block List, Max: 1, Deprecated) Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead. (see below for nested schema)
+                      Elasticsearch connection configuration block. This property will be removed in a future provider version. Configure the Elasticsearch connection via the provider configuration instead.
+                    items:
+                      properties:
+                        caData:
+                          description: |-
+                            encoded custom Certificate Authority certificate
+                            PEM-encoded custom Certificate Authority certificate
+                          type: string
+                        caFile:
+                          description: |-
+                            (String) Path to a custom Certificate Authority certificate
+                            Path to a custom Certificate Authority certificate
+                          type: string
+                        certData:
+                          description: |-
+                            (String) PEM encoded certificate for client auth
+                            PEM encoded certificate for client auth
+                          type: string
+                        certFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded certificate for client auth
+                            Path to a file containing the PEM encoded certificate for client auth
+                          type: string
+                        insecure:
+                          description: |-
+                            (Boolean) Disable TLS certificate validation
+                            Disable TLS certificate validation
+                          type: boolean
+                        keyFile:
+                          description: |-
+                            (String) Path to a file containing the PEM encoded private key for client auth
+                            Path to a file containing the PEM encoded private key for client auth
+                          type: string
+                        username:
+                          description: |-
+                            (String) Username to use for API authentication to Elasticsearch.
+                            Username to use for API authentication to Elasticsearch.
+                          type: string
+                      type: object
+                    type: array
+                  expandWildcards:
+                    description: |-
+                      separated values, such as closed,hidden.
+                      Determines how wildcard patterns in the `indices` parameter match data streams and indices. Supports comma-separated values, such as `closed,hidden`.
+                    type: string
+                  expireAfter:
+                    description: |-
+                      (String) Time period after which a snapshot is considered expired and eligible for deletion.
+                      Time period after which a snapshot is considered expired and eligible for deletion.
+                    type: string
+                  featureStates:
+                    description: |-
+                      (Set of String) Feature states to include in the snapshot.
+                      Feature states to include in the snapshot.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  id:
+                    description: (String) Internal identifier of the resource
+                    type: string
+                  ignoreUnavailable:
+                    description: |-
+                      (Boolean) If false, the snapshot fails if any data stream or index in indices is missing or closed. If true, the snapshot ignores missing or closed data streams and indices.
+                      If `false`, the snapshot fails if any data stream or index in indices is missing or closed. If `true`, the snapshot ignores missing or closed data streams and indices.
+                    type: boolean
+                  includeGlobalState:
+                    description: |-
+                      (Boolean) If true, include the cluster state in the snapshot.
+                      If `true`, include the cluster state in the snapshot.
+                    type: boolean
+                  indices:
+                    description: |-
+                      separated list of data streams and indices to include in the snapshot.
+                      Comma-separated list of data streams and indices to include in the snapshot.
+                    items:
+                      type: string
+                    type: array
+                  maxCount:
+                    description: |-
+                      (Number) Maximum number of snapshots to retain, even if the snapshots have not yet expired.
+                      Maximum number of snapshots to retain, even if the snapshots have not yet expired.
+                    type: number
+                  metadata:
+                    description: |-
+                      (String) Attaches arbitrary metadata to the snapshot.
+                      Attaches arbitrary metadata to the snapshot.
+                    type: string
+                  minCount:
+                    description: |-
+                      (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
+                      Minimum number of snapshots to retain, even if the snapshots have expired.
+                    type: number
+                  partial:
+                    description: |-
+                      (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
+                      If `false`, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
+                    type: boolean
+                  repository:
+                    description: |-
+                      (String) Repository used to store snapshots created by this policy.
+                      Repository used to store snapshots created by this policy.
+                    type: string
+                  schedule:
+                    description: |-
+                      (String) Periodic or absolute schedule at which the policy creates snapshots.
+                      Periodic or absolute schedule at which the policy creates snapshots.
+                    type: string
+                  snapshotName:
+                    description: |-
+                      (String) Name automatically assigned to each snapshot created by the policy.
+                      Name automatically assigned to each snapshot created by the policy.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

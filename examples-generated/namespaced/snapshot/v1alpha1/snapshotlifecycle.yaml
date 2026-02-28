@@ -1,0 +1,40 @@
+apiVersion: snapshot.elasticstack.m.crossplane.io/v1alpha1
+kind: SnapshotLifecycle
+metadata:
+  annotations:
+    meta.upbound.io/example-id: snapshot/v1alpha1/snapshotlifecycle
+  labels:
+    testing.upbound.io/example-name: slm_policy
+  name: slm-policy
+  namespace: crossplane-system
+spec:
+  forProvider:
+    expireAfter: 30d
+    ignoreUnavailable: false
+    includeGlobalState: false
+    indices:
+    - data-*
+    - important
+    maxCount: 50
+    minCount: 5
+    repository: ${elasticstack_elasticsearch_snapshot_repository.repo.name}
+    schedule: 0 30 1 * * ?
+    snapshotName: <daily-snap-{now/d}>
+
+---
+
+apiVersion: snapshot.elasticstack.m.crossplane.io/v1alpha1
+kind: SnapshotRepository
+metadata:
+  annotations:
+    meta.upbound.io/example-id: snapshot/v1alpha1/snapshotlifecycle
+  labels:
+    testing.upbound.io/example-name: repo
+  name: repo
+  namespace: crossplane-system
+spec:
+  forProvider:
+    fs:
+    - compress: true
+      location: /tmp/snapshots
+      maxRestoreBytesPerSec: 20mb
