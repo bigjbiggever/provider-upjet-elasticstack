@@ -40,3 +40,18 @@ make build
 
 For filing bugs, suggesting improvements, or requesting new features, please
 open an [issue](https://github.com/bigjbiggever/provider-elasticstack/issues).
+
+## NOTICE
+
+This provider is not yet ready for production use. It is a work in progress and is not yet feature complete.
+
+## Resources
+
+| Resource | Group | Version | Kind | Status | Notes |
+|----------|-------|---------|------|--------|-------|
+| ElasticsearchClusterSettings | cluster | v1alpha1 | ClusterSettings | Working - Needs Testing | |
+| ElasticsearchRole | security | v1alpha1 | ElasticsearchRole | Partially implemented - Not working | |
+| ElasticsearchUser | security | v1alpha1 | ElasticsearchUser | Working - Needs Testing | |
+| SnapshotLifecycle | snapshot | v1alpha1 | SnapshotLifecycle | Unknown | |
+| SnapshotRepository | snapshot | v1alpha1 | SnapshotRepository | Unknown | |
+| Index Lifecycle Management | index | v1alpha1 | IndexLifecycle | Unknown | |
