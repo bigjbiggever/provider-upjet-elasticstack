@@ -8,7 +8,12 @@ import (
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
 	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"null_resource": idWithStub(),
+	"elasticstack_elasticsearch_cluster_settings":    config.IdentifierFromProvider,
+	"elasticstack_elasticsearch_index_lifecycle":     config.NameAsIdentifier,
+	"elasticstack_elasticsearch_security_role":       config.NameAsIdentifier,
+	"elasticstack_elasticsearch_security_user":       config.IdentifierFromProvider,
+	"elasticstack_elasticsearch_snapshot_lifecycle":  config.NameAsIdentifier,
+	"elasticstack_elasticsearch_snapshot_repository": config.NameAsIdentifier,
 }
 
 func idWithStub() config.ExternalName {

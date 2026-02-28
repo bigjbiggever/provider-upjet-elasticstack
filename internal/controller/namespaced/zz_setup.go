@@ -9,16 +9,26 @@ import (
 
 	"github.com/crossplane/upjet/v2/pkg/controller"
 
-	resource "github.com/crossplane/upjet-provider-template/internal/controller/namespaced/null/resource"
-	providerconfig "github.com/crossplane/upjet-provider-template/internal/controller/namespaced/providerconfig"
+	clustersettings "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/cluster/clustersettings"
+	indexlifecycle "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/index/indexlifecycle"
+	providerconfig "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/providerconfig"
+	elasticsearchrole "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/security/elasticsearchrole"
+	elasticsearchuser "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/security/elasticsearchuser"
+	snapshotlifecycle "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/snapshot/snapshotlifecycle"
+	snapshotrepository "github.com/bigjbiggever/provider-elasticstack/internal/controller/namespaced/snapshot/snapshotrepository"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.Setup,
+		clustersettings.Setup,
+		indexlifecycle.Setup,
 		providerconfig.Setup,
+		elasticsearchrole.Setup,
+		elasticsearchuser.Setup,
+		snapshotlifecycle.Setup,
+		snapshotrepository.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -31,8 +41,13 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 // the supplied manager gated.
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		resource.SetupGated,
+		clustersettings.SetupGated,
+		indexlifecycle.SetupGated,
 		providerconfig.SetupGated,
+		elasticsearchrole.SetupGated,
+		elasticsearchuser.SetupGated,
+		snapshotlifecycle.SetupGated,
+		snapshotrepository.SetupGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
