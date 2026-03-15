@@ -1,6 +1,12 @@
 package snapshot_lifecycle
 
-import "github.com/crossplane/upjet/v2/pkg/config"
+import (
+	"context"
+
+	"github.com/crossplane/upjet/v2/pkg/config"
+
+	"github.com/bigjbiggever/provider-elasticstack/config/common"
+)
 
 // Configure configures individual resources by adding custom ResourceConfigurators.
 func Configure(p *config.Provider) {
@@ -9,5 +15,13 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "github"
 		r.ShortGroup = "snapshot"
 		r.Kind = "SnapshotLifecycle"
+		r.ExternalName = config.NewExternalNameFrom(config.NameAsIdentifier,
+			config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, _ map[string]any, terraformProviderConfig map[string]any) (string, error) {
+				return common.ClusterScopedID(ctx, externalName, terraformProviderConfig)
+			}),
+			config.WithGetExternalNameFn(func(_ config.GetExternalNameFn, tfstate map[string]any) (string, error) {
+				return common.ExternalNameFromStateID(tfstate)
+			}),
+		)
 	})
 }
