@@ -39,6 +39,7 @@ func patchClusterManagedResourceSpec(rootDir string) error {
 			return nil
 		}
 
+		// #nosec G304 -- path is constrained by filepath.WalkDir rooted at clusterAPIsDir.
 		b, err := os.ReadFile(path)
 		if err != nil {
 			return err

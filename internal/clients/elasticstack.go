@@ -35,6 +35,8 @@ const (
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
 // returns Terraform provider setup configuration
+//
+//nolint:gocyclo // Provider setup branches on credentials/options and is clearer as a single flow.
 func TerraformSetupBuilder(version, providerSource, providerVersion string) terraform.SetupFn {
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
 		ps := terraform.Setup{
@@ -96,6 +98,7 @@ func resolveProviderConfig(ctx context.Context, crClient client.Client, mg resou
 	return resolveModern(ctx, crClient, managed)
 }
 
+//nolint:gocyclo // Resolution checks both namespaced and cluster ProviderConfig variants by design.
 func resolveModern(ctx context.Context, crClient client.Client, mg resource.ModernManaged) (*namespacedv1beta1.ProviderConfigSpec, error) {
 	configRef := mg.GetProviderConfigReference()
 	if configRef == nil {

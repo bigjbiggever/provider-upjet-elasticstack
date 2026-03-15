@@ -39,6 +39,8 @@ func ExternalNameFromStateID(tfstate map[string]any) (string, error) {
 }
 
 // GetClusterUUID discovers the cluster UUID using provider configuration.
+//
+//nolint:gocyclo // The branching is intentional to support multiple provider-config map shapes.
 func GetClusterUUID(ctx context.Context, terraformProviderConfig map[string]any) (string, error) {
 	cfg, err := resolveElasticsearchConfig(terraformProviderConfig)
 	if err != nil {
