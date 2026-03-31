@@ -85,12 +85,10 @@ func main() {
 
 	zl := zap.New(zap.UseDevMode(*debug))
 	log := logging.NewLogrLogger(zl.WithName("provider-elasticstack"))
-	if *debug {
-		// The controller-runtime runs with a no-op logger by default. It is
-		// *very* verbose even at info level, so we only provide it a real
-		// logger when we're running in debug mode.
-		ctrl.SetLogger(zl)
-	}
+	// The controller-runtime uses a no-op logger until one is configured.
+	// Always install the provider logger so controller and manager logs are
+	// emitted in Kubernetes; --debug only changes logging verbosity/format.
+	ctrl.SetLogger(zl)
 
 	log.Debug("Starting", "sync-period", syncPeriod.String(), "poll-interval", pollInterval.String(), "max-reconcile-rate", *maxReconcileRate)
 
