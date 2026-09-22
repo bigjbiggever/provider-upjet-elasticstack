@@ -256,6 +256,10 @@ type ElasticsearchRoleInitParameters struct {
 	// Optional meta-data.
 	Metadata *string `json:"metadata,omitempty" tf:"metadata,omitempty"`
 
+	// (String) The name of the role.
+	// The name of the role.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Block Set) A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model. (see below for nested schema)
 	// A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model.
 	RemoteIndices []RemoteIndicesInitParameters `json:"remoteIndices,omitempty" tf:"remote_indices,omitempty"`
@@ -299,6 +303,10 @@ type ElasticsearchRoleObservation struct {
 	// data.
 	// Optional meta-data.
 	Metadata *string `json:"metadata,omitempty" tf:"metadata,omitempty"`
+
+	// (String) The name of the role.
+	// The name of the role.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block Set) A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model. (see below for nested schema)
 	// A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model.
@@ -347,6 +355,11 @@ type ElasticsearchRoleParameters struct {
 	// Optional meta-data.
 	// +kubebuilder:validation:Optional
 	Metadata *string `json:"metadata,omitempty" tf:"metadata,omitempty"`
+
+	// (String) The name of the role.
+	// The name of the role.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block Set) A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model. (see below for nested schema)
 	// A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model.
@@ -641,8 +654,9 @@ type ElasticsearchRoleStatus struct {
 type ElasticsearchRole struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              ElasticsearchRoleSpec   `json:"spec"`
-	Status            ElasticsearchRoleStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	Spec   ElasticsearchRoleSpec   `json:"spec"`
+	Status ElasticsearchRoleStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -4,6 +4,10 @@
 PROJECT_NAME ?= provider-elasticstack
 PROJECT_REPO ?= github.com/bigjbiggever/$(PROJECT_NAME)
 
+# Bumped minor version for local builds and artifact tagging
+# If you prefer to build with a different version, export VERSION=...
+VERSION ?= v0.3.0
+
 export TERRAFORM_VERSION ?= 1.5.7
 
 # Do not allow a version of terraform greater than 1.5.x, due to versions 1.6+ being

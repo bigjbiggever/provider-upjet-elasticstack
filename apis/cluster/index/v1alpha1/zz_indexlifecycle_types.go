@@ -891,6 +891,10 @@ type IndexLifecycleInitParameters struct {
 	// Optional user metadata about the ilm policy. Must be valid JSON document.
 	Metadata *string `json:"metadata,omitempty" tf:"metadata,omitempty"`
 
+	// (String) Identifier for the policy.
+	// Identifier for the policy.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Block List, Max: 1) The index is no longer being updated but is still being queried. (see below for nested schema)
 	// The index is no longer being updated but is still being queried.
 	Warm []WarmInitParameters `json:"warm,omitempty" tf:"warm,omitempty"`
@@ -929,6 +933,10 @@ type IndexLifecycleObservation struct {
 	// The DateTime of the last modification.
 	ModifiedDate *string `json:"modifiedDate,omitempty" tf:"modified_date,omitempty"`
 
+	// (String) Identifier for the policy.
+	// Identifier for the policy.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Block List, Max: 1) The index is no longer being updated but is still being queried. (see below for nested schema)
 	// The index is no longer being updated but is still being queried.
 	Warm []WarmObservation `json:"warm,omitempty" tf:"warm,omitempty"`
@@ -965,6 +973,11 @@ type IndexLifecycleParameters struct {
 	// Optional user metadata about the ilm policy. Must be valid JSON document.
 	// +kubebuilder:validation:Optional
 	Metadata *string `json:"metadata,omitempty" tf:"metadata,omitempty"`
+
+	// (String) Identifier for the policy.
+	// Identifier for the policy.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block List, Max: 1) The index is no longer being updated but is still being queried. (see below for nested schema)
 	// The index is no longer being updated but is still being queried.
@@ -1746,8 +1759,9 @@ type IndexLifecycleStatus struct {
 type IndexLifecycle struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              IndexLifecycleSpec   `json:"spec"`
-	Status            IndexLifecycleStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	Spec   IndexLifecycleSpec   `json:"spec"`
+	Status IndexLifecycleStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

@@ -15,7 +15,7 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "github"
 		r.ShortGroup = "snapshot"
 		r.Kind = "SnapshotLifecycle"
-		r.ExternalName = config.NewExternalNameFrom(config.NameAsIdentifier,
+    r.ExternalName = config.NewExternalNameFrom(config.IdentifierFromProvider,
 			config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, _ map[string]any, terraformProviderConfig map[string]any) (string, error) {
 				return common.ClusterScopedID(ctx, externalName, terraformProviderConfig)
 			}),

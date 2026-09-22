@@ -29,5 +29,6 @@ spec:
       ${jsonencode({
           version = 1
         })}
+    name: testrole
     runAs:
     - other_user

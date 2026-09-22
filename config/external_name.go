@@ -7,13 +7,17 @@ import (
 // ExternalNameConfigs contains all external name configurations for this
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
-	// Import requires using a randomly generated ID from provider: nl-2e21sda
-	"elasticstack_elasticsearch_cluster_settings":    config.IdentifierFromProvider,
-	"elasticstack_elasticsearch_index_lifecycle":     config.NameAsIdentifier,
-	"elasticstack_elasticsearch_security_role":       config.NameAsIdentifier,
-	"elasticstack_elasticsearch_security_user":       config.IdentifierFromProvider,
-	"elasticstack_elasticsearch_snapshot_lifecycle":  config.NameAsIdentifier,
-	"elasticstack_elasticsearch_snapshot_repository": config.NameAsIdentifier,
+    // Import requires using a randomly generated ID from provider: nl-2e21sda
+    "elasticstack_elasticsearch_cluster_settings":   config.IdentifierFromProvider,
+    // Allow K8s object name to differ from Elastic internal name.
+    // Keep the "name" argument in the schema and let users set it explicitly.
+    // Using IdentifierFromProvider here disables the name initializer and
+    // prevents coupling metadata.name to the provider identifier.
+    "elasticstack_elasticsearch_index_lifecycle":     config.IdentifierFromProvider,
+    "elasticstack_elasticsearch_security_role":       config.IdentifierFromProvider,
+    "elasticstack_elasticsearch_security_user":       config.IdentifierFromProvider,
+    "elasticstack_elasticsearch_snapshot_lifecycle":  config.IdentifierFromProvider,
+    "elasticstack_elasticsearch_snapshot_repository": config.IdentifierFromProvider,
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

@@ -836,6 +836,10 @@ type SnapshotRepositoryInitParameters struct {
 	// Support for using HDFS File System as a repository for Snapshot/Restore. See the [repository HDFS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-hdfs.html) for more details.
 	Hdfs []HdfsInitParameters `json:"hdfs,omitempty" tf:"hdfs,omitempty"`
 
+	// (String) Name of the snapshot repository to register or update.
+	// Name of the snapshot repository to register or update.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
 	// Support for using AWS S3 as a repository for Snapshot/Restore. See the [repository S3 plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3-repository.html) for more details.
 	S3 []S3InitParameters `json:"s3,omitempty" tf:"s3,omitempty"`
@@ -873,6 +877,10 @@ type SnapshotRepositoryObservation struct {
 
 	// (String) Internal identifier of the resource
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) Name of the snapshot repository to register or update.
+	// Name of the snapshot repository to register or update.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
 	// Support for using AWS S3 as a repository for Snapshot/Restore. See the [repository S3 plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3-repository.html) for more details.
@@ -913,6 +921,11 @@ type SnapshotRepositoryParameters struct {
 	// Support for using HDFS File System as a repository for Snapshot/Restore. See the [repository HDFS plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-hdfs.html) for more details.
 	// +kubebuilder:validation:Optional
 	Hdfs []HdfsParameters `json:"hdfs,omitempty" tf:"hdfs,omitempty"`
+
+	// (String) Name of the snapshot repository to register or update.
+	// Name of the snapshot repository to register or update.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
 	// Support for using AWS S3 as a repository for Snapshot/Restore. See the [repository S3 plugin documentation](https://www.elastic.co/guide/en/elasticsearch/plugins/current/repository-s3-repository.html) for more details.
@@ -1092,8 +1105,9 @@ type SnapshotRepositoryStatus struct {
 type SnapshotRepository struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              SnapshotRepositorySpec   `json:"spec"`
-	Status            SnapshotRepositoryStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	Spec   SnapshotRepositorySpec   `json:"spec"`
+	Status SnapshotRepositoryStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

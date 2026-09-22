@@ -17,7 +17,7 @@ func Configure(p *config.Provider) {
 		// this resource, which would be "github"
 		r.ShortGroup = "security"
 		r.Kind = "ElasticsearchRole"
-		r.ExternalName = config.NewExternalNameFrom(config.NameAsIdentifier,
+    r.ExternalName = config.NewExternalNameFrom(config.IdentifierFromProvider,
 			config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, _ map[string]any, terraformProviderConfig map[string]any) (string, error) {
 				return getRoleID(ctx, externalName, terraformProviderConfig)
 			}),
