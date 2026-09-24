@@ -284,6 +284,11 @@ spec:
                       (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
                       Minimum number of snapshots to retain, even if the snapshots have expired.
                     type: number
+                  name:
+                    description: |-
+                      (String) ID for the snapshot lifecycle policy you want to create or update.
+                      ID for the snapshot lifecycle policy you want to create or update.
+                    type: string
                   partial:
                     description: |-
                       (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
@@ -514,6 +519,11 @@ spec:
                       (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
                       Minimum number of snapshots to retain, even if the snapshots have expired.
                     type: number
+                  name:
+                    description: |-
+                      (String) ID for the snapshot lifecycle policy you want to create or update.
+                      ID for the snapshot lifecycle policy you want to create or update.
+                    type: string
                   partial:
                     description: |-
                       (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
@@ -594,6 +604,10 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
             - message: spec.forProvider.repository is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.repository)
@@ -703,6 +717,11 @@ spec:
                       (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
                       Minimum number of snapshots to retain, even if the snapshots have expired.
                     type: number
+                  name:
+                    description: |-
+                      (String) ID for the snapshot lifecycle policy you want to create or update.
+                      ID for the snapshot lifecycle policy you want to create or update.
+                    type: string
                   partial:
                     description: |-
                       (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.

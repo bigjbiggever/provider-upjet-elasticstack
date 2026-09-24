@@ -311,6 +311,11 @@ spec:
                       data.
                       Optional meta-data.
                     type: string
+                  name:
+                    description: |-
+                      (String) The name of the role.
+                      The name of the role.
+                    type: string
                   remoteIndices:
                     description: |-
                       (Block Set) A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model. (see below for nested schema)
@@ -625,6 +630,11 @@ spec:
                       data.
                       Optional meta-data.
                     type: string
+                  name:
+                    description: |-
+                      (String) The name of the role.
+                      The name of the role.
+                    type: string
                   remoteIndices:
                     description: |-
                       (Block Set) A list of remote indices permissions entries. Remote indices are effective for remote clusters configured with the API key based model. They have no effect for remote clusters configured with the certificate based model. (see below for nested schema)
@@ -753,6 +763,11 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
             description: ElasticsearchRoleStatus defines the observed state of ElasticsearchRole.
             properties:
@@ -913,6 +928,11 @@ spec:
                     description: |-
                       data.
                       Optional meta-data.
+                    type: string
+                  name:
+                    description: |-
+                      (String) The name of the role.
+                      The name of the role.
                     type: string
                   remoteIndices:
                     description: |-

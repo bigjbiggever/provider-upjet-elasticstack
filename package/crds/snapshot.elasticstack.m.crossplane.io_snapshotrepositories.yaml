@@ -394,6 +394,11 @@ spec:
                           type: string
                       type: object
                     type: array
+                  name:
+                    description: |-
+                      (String) Name of the snapshot repository to register or update.
+                      Name of the snapshot repository to register or update.
+                    type: string
                   s3:
                     description: |-
                       (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
@@ -857,6 +862,11 @@ spec:
                           type: string
                       type: object
                     type: array
+                  name:
+                    description: |-
+                      (String) Name of the snapshot repository to register or update.
+                      Name of the snapshot repository to register or update.
+                    type: string
                   s3:
                     description: |-
                       (Block List, Max: 1) Support for using AWS S3 as a repository for Snapshot/Restore. See the repository S3 plugin documentation for more details. (see below for nested schema)
@@ -1052,6 +1062,11 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
             description: SnapshotRepositoryStatus defines the observed state of SnapshotRepository.
             properties:
@@ -1294,6 +1309,11 @@ spec:
                     type: array
                   id:
                     description: (String) Internal identifier of the resource
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the snapshot repository to register or update.
+                      Name of the snapshot repository to register or update.
                     type: string
                   s3:
                     description: |-

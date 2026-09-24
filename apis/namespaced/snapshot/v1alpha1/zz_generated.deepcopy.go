@@ -9,7 +9,7 @@
 package v1alpha1
 
 import (
-	v1 "github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
+	"github.com/crossplane/crossplane-runtime/v2/apis/common/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -1263,6 +1263,11 @@ func (in *SnapshotLifecycleInitParameters) DeepCopyInto(out *SnapshotLifecycleIn
 		*out = new(float64)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Partial != nil {
 		in, out := &in.Partial, &out.Partial
 		*out = new(bool)
@@ -1399,6 +1404,11 @@ func (in *SnapshotLifecycleObservation) DeepCopyInto(out *SnapshotLifecycleObser
 		*out = new(float64)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Partial != nil {
 		in, out := &in.Partial, &out.Partial
 		*out = new(bool)
@@ -1496,6 +1506,11 @@ func (in *SnapshotLifecycleParameters) DeepCopyInto(out *SnapshotLifecycleParame
 	if in.MinCount != nil {
 		in, out := &in.MinCount, &out.MinCount
 		*out = new(float64)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
 		**out = **in
 	}
 	if in.Partial != nil {
@@ -1871,6 +1886,11 @@ func (in *SnapshotRepositoryInitParameters) DeepCopyInto(out *SnapshotRepository
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.S3 != nil {
 		in, out := &in.S3, &out.S3
 		*out = make([]S3InitParameters, len(*in))
@@ -1977,6 +1997,11 @@ func (in *SnapshotRepositoryObservation) DeepCopyInto(out *SnapshotRepositoryObs
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.S3 != nil {
 		in, out := &in.S3, &out.S3
 		*out = make([]S3Observation, len(*in))
@@ -2045,6 +2070,11 @@ func (in *SnapshotRepositoryParameters) DeepCopyInto(out *SnapshotRepositoryPara
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
 	}
 	if in.S3 != nil {
 		in, out := &in.S3, &out.S3
