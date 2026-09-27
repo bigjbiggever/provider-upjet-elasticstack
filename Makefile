@@ -6,7 +6,7 @@ PROJECT_REPO ?= github.com/bigjbiggever/$(PROJECT_NAME)
 
 # Bumped minor version for local builds and artifact tagging
 # If you prefer to build with a different version, export VERSION=...
-VERSION ?= v0.3.0
+VERSION ?= v0.3.1
 
 export TERRAFORM_VERSION ?= 1.5.7
 

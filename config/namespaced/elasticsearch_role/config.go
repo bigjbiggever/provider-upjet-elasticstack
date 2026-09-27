@@ -18,19 +18,21 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "security"
 		r.Kind = "ElasticsearchRole"
     r.ExternalName = config.NewExternalNameFrom(config.IdentifierFromProvider,
-            config.WithSetIdentifierArgumentsFn(func(parent config.SetIdentifierArgumentsFn, base map[string]any, externalName string) {
-                if base["name"] == nil || base["name"] == "" {
-                    base["name"] = externalName
+            config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, parameters map[string]any, terraformProviderConfig map[string]any) (string, error) {
+                if externalName == "" {
+                    if v, ok := parameters["name"]; ok {
+                        if s, ok2 := v.(string); ok2 && s != "" {
+                            externalName = s
+                        }
+                    }
                 }
-            }),
-            config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, _ map[string]any, terraformProviderConfig map[string]any) (string, error) {
                 return getRoleID(ctx, externalName, terraformProviderConfig)
             }),
-			config.WithGetExternalNameFn(func(_ config.GetExternalNameFn, tfstate map[string]any) (string, error) {
-				id, ok := tfstate["id"].(string)
-				if !ok || id == "" {
-					return "", fmt.Errorf("cannot find id in tfstate")
-				}
+            config.WithGetExternalNameFn(func(_ config.GetExternalNameFn, tfstate map[string]any) (string, error) {
+                id, ok := tfstate["id"].(string)
+                if !ok || id == "" {
+                    return "", fmt.Errorf("cannot find id in tfstate")
+                }
 				if parts := strings.SplitN(id, "/", 2); len(parts) == 2 {
 					return parts[1], nil
 				}
