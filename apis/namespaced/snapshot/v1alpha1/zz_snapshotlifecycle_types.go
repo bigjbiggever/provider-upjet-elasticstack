@@ -214,6 +214,10 @@ type SnapshotLifecycleInitParameters struct {
 	// Minimum number of snapshots to retain, even if the snapshots have expired.
 	MinCount *float64 `json:"minCount,omitempty" tf:"min_count,omitempty"`
 
+	// (String) ID for the snapshot lifecycle policy you want to create or update.
+	// ID for the snapshot lifecycle policy you want to create or update.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
 	// If `false`, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
 	Partial *bool `json:"partial,omitempty" tf:"partial,omitempty"`
@@ -276,6 +280,10 @@ type SnapshotLifecycleObservation struct {
 	// (Number) Minimum number of snapshots to retain, even if the snapshots have expired.
 	// Minimum number of snapshots to retain, even if the snapshots have expired.
 	MinCount *float64 `json:"minCount,omitempty" tf:"min_count,omitempty"`
+
+	// (String) ID for the snapshot lifecycle policy you want to create or update.
+	// ID for the snapshot lifecycle policy you want to create or update.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
 	// If `false`, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
@@ -347,6 +355,11 @@ type SnapshotLifecycleParameters struct {
 	// +kubebuilder:validation:Optional
 	MinCount *float64 `json:"minCount,omitempty" tf:"min_count,omitempty"`
 
+	// (String) ID for the snapshot lifecycle policy you want to create or update.
+	// ID for the snapshot lifecycle policy you want to create or update.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Boolean) If false, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
 	// If `false`, the entire snapshot will fail if one or more indices included in the snapshot do not have all primary shards available.
 	// +kubebuilder:validation:Optional
@@ -404,6 +417,7 @@ type SnapshotLifecycleStatus struct {
 type SnapshotLifecycle struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.repository) || (has(self.initProvider) && has(self.initProvider.repository))",message="spec.forProvider.repository is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.schedule) || (has(self.initProvider) && has(self.initProvider.schedule))",message="spec.forProvider.schedule is a required parameter"
 	Spec   SnapshotLifecycleSpec   `json:"spec"`

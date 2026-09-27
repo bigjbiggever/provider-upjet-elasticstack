@@ -609,6 +609,11 @@ spec:
                       (String) Optional user metadata about the ilm policy. Must be valid JSON document.
                       Optional user metadata about the ilm policy. Must be valid JSON document.
                     type: string
+                  name:
+                    description: |-
+                      (String) Identifier for the policy.
+                      Identifier for the policy.
+                    type: string
                   warm:
                     description: |-
                       (Block List, Max: 1) The index is no longer being updated but is still being queried. (see below for nested schema)
@@ -1310,6 +1315,11 @@ spec:
                       (String) Optional user metadata about the ilm policy. Must be valid JSON document.
                       Optional user metadata about the ilm policy. Must be valid JSON document.
                     type: string
+                  name:
+                    description: |-
+                      (String) Identifier for the policy.
+                      Identifier for the policy.
+                    type: string
                   warm:
                     description: |-
                       (Block List, Max: 1) The index is no longer being updated but is still being queried. (see below for nested schema)
@@ -1526,6 +1536,11 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
             description: IndexLifecycleStatus defines the observed state of IndexLifecycle.
             properties:
@@ -1990,6 +2005,11 @@ spec:
                     description: |-
                       (String) The DateTime of the last modification.
                       The DateTime of the last modification.
+                    type: string
+                  name:
+                    description: |-
+                      (String) Identifier for the policy.
+                      Identifier for the policy.
                     type: string
                   warm:
                     description: |-

@@ -20,6 +20,7 @@ spec:
       - maxAge: 1d
       setPriority:
       - priority: 0
+    name: my_ilm_policy
     warm:
     - allocate:
       - exclude: |-

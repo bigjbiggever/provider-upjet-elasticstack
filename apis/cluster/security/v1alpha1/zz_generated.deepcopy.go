@@ -457,6 +457,11 @@ func (in *ElasticsearchRoleInitParameters) DeepCopyInto(out *ElasticsearchRoleIn
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.RemoteIndices != nil {
 		in, out := &in.RemoteIndices, &out.RemoteIndices
 		*out = make([]RemoteIndicesInitParameters, len(*in))
@@ -574,6 +579,11 @@ func (in *ElasticsearchRoleObservation) DeepCopyInto(out *ElasticsearchRoleObser
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.RemoteIndices != nil {
 		in, out := &in.RemoteIndices, &out.RemoteIndices
 		*out = make([]RemoteIndicesObservation, len(*in))
@@ -651,6 +661,11 @@ func (in *ElasticsearchRoleParameters) DeepCopyInto(out *ElasticsearchRoleParame
 	}
 	if in.Metadata != nil {
 		in, out := &in.Metadata, &out.Metadata
+		*out = new(string)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
 		*out = new(string)
 		**out = **in
 	}

@@ -1758,6 +1758,11 @@ func (in *IndexLifecycleInitParameters) DeepCopyInto(out *IndexLifecycleInitPara
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Warm != nil {
 		in, out := &in.Warm, &out.Warm
 		*out = make([]WarmInitParameters, len(*in))
@@ -1862,6 +1867,11 @@ func (in *IndexLifecycleObservation) DeepCopyInto(out *IndexLifecycleObservation
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Warm != nil {
 		in, out := &in.Warm, &out.Warm
 		*out = make([]WarmObservation, len(*in))
@@ -1921,6 +1931,11 @@ func (in *IndexLifecycleParameters) DeepCopyInto(out *IndexLifecycleParameters) 
 	}
 	if in.Metadata != nil {
 		in, out := &in.Metadata, &out.Metadata
+		*out = new(string)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
 		*out = new(string)
 		**out = **in
 	}
