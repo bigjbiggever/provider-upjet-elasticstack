@@ -16,9 +16,14 @@ func Configure(p *config.Provider) {
 		r.ShortGroup = "snapshot"
 		r.Kind = "SnapshotLifecycle"
     r.ExternalName = config.NewExternalNameFrom(config.IdentifierFromProvider,
-			config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, _ map[string]any, terraformProviderConfig map[string]any) (string, error) {
-				return common.ClusterScopedID(ctx, externalName, terraformProviderConfig)
-			}),
+            config.WithSetIdentifierArgumentsFn(func(parent config.SetIdentifierArgumentsFn, base map[string]any, externalName string) {
+                if base["name"] == nil || base["name"] == "" {
+                    base["name"] = externalName
+                }
+            }),
+            config.WithGetIDFn(func(_ config.GetIDFn, ctx context.Context, externalName string, _ map[string]any, terraformProviderConfig map[string]any) (string, error) {
+                return common.ClusterScopedID(ctx, externalName, terraformProviderConfig)
+            }),
 			config.WithGetExternalNameFn(func(_ config.GetExternalNameFn, tfstate map[string]any) (string, error) {
 				return common.ExternalNameFromStateID(tfstate)
 			}),
